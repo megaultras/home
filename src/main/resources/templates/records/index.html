@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html th:replace="layout/main::layout(~{::title}, ~{::section}, ${alert_type}, ${alert_message})" xmlns:th="http://www.thymeleaf.org">
+	<head>
+    	<title th:fragment="title" th:text="${h1}"></title>
+	</head>
+   	<body>
+   		<section>
+      		<h1 th:text="${h1}"></h1>
+			<hr>
+			
+			<div th:replace="records/account::details(${account})"></div>
+			<hr>
+			
+			<div th:replace="records/chart::chart"></div>
+			<hr>
+			
+			<div class="row">
+			    <div class="col-8">
+			    	<div th:replace="records/list::list(${pagination})"></div>
+			    </div>
+			    <div class="col-4">
+			    	<div th:replace="records/form::add(${record}, ${last})"></div>
+			        <hr>
+			        
+			        <div th:replace="records/stat::stat(${max}, ${min}, ${avg})"></div>
+			    </div>
+			</div>
+    	</section>   
+   	</body>
+</html>

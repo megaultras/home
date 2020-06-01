@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html th:replace="layout/main::layout(~{::title}, ~{::section}, ${alert_type}, ${alert_message})" xmlns:th="http://www.thymeleaf.org">
+	<head>
+    	<title th:fragment="title">Welcome</title>
+	</head>
+   	<body>
+   		<section>
+   			<script th:inline="javascript">
+   			/*<![CDATA[*/
+	   			$(function() {
+			        $('#filter_period_from').val(/*[[${periodFrom}]]*/);
+   					$('#filter_period_to').val(/*[[${periodTo}]]*/);
+   					
+   					loadChart('electricity', /*[[${periodFrom}]]*/, /*[[${periodTo}]]*/);
+					loadChart('water', /*[[${periodFrom}]]*/, /*[[${periodTo}]]*/);
+  					loadChart('gas', /*[[${periodFrom}]]*/, /*[[${periodTo}]]*/);
+			    });
+		    /*]]>*/
+   			</script>
+			
+      		<div class="row" style="margin-top:20px;">
+			    <div class="col-12">
+			        <form class="form-inline" method="post" action="/charts">
+			            <div class="form-group">
+			                <select name="period_from" id="filter_period_from" class="form-control" style="width:120px;">
+			                    <option th:each="period: ${periods}" th:value="${period}" th:text="${period}"></option>
+			                </select>
+			            </div>
+			            <div class="form-group">
+			                <select name="period_to" id="filter_period_to" class="form-control" style="width:120px;">
+			                    <option th:each="period: ${periods}" th:value="${period}" th:text="${period}"></option>
+			                </select>
+			            </div>
+			            <div class="form-group">
+			                <button type="button" class="btn btn-primary" onclick="reloadCharts();">показати</button>
+			            </div>
+			        </form>
+			    </div>
+			</div>
+			<hr>
+			<div class="row">
+			    <div class="col-12">
+			        <div class="card">
+			            <div class="card-header">
+			                Електроенергія
+			            </div>
+			            <div class="card-body">
+			                <div id="chart_electricity" style="height:200px;"></div>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+			<hr>
+			<div class="row">
+			    <div class="col-12">
+			        <div class="card">
+			            <div class="card-header">
+			                Газ
+			            </div>
+			            <div class="card-body">
+			                <div id="chart_gas" style="height:200px;"></div>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+			<hr>
+			<div class="row">
+			    <div class="col-12">
+			        <div class="card">
+			            <div class="card-header">
+			                Вода
+			            </div>
+			            <div class="card-body">
+			                <div id="chart_water" style="height:200px;"></div>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+    	</section>   
+   	</body>
+</html>

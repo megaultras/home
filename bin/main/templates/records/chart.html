@@ -1,0 +1,13 @@
+<div th:fragment="chart" class="row">
+	<script th:inline="javascript">
+   	/*<![CDATA[*/
+	   	$(function() {
+			loadCompareChart(/*[[${type}]]*/);
+		});
+	/*]]>*/
+   	</script>
+   	
+    <div class="col-12">
+        <div id="chart_compare" style="height:300px;"></div>
+    </div>
+</div>

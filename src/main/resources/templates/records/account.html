@@ -1,0 +1,55 @@
+<div th:fragment="details(account)">
+	<div class="jumbotron" style="padding:20px;">
+	    <div class="row">
+	        <div class="col-3">
+	            <small>Договір</small>&nbsp;
+	            <strong th:text="${account.account_id}"></strong>
+	        </div>
+	        <div class="col-3">
+	            <small>Користувач</small>&nbsp;
+	            <strong th:text="${account.username}"></strong>
+	        </div>
+	        <div class="col-3">
+	            <div *ngIf="model.link">
+	                <a th:href="${account.link}" target="_blank">перейти</a>
+	            </div>
+	        </div>
+	        <div class="col-3" style="text-align:right;">
+	            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#account_form_modal">змінити</button>
+	        </div>
+	    </div>
+	</div>
+	
+	<div th:if="${account}" class="modal fade" id="account_form_modal" tabindex="-1" role="dialog" aria-labelledby="account_form_modal_label" *ngIf="model">
+	    <div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h4 class="modal-title" id="account_form_modal_label">Редагувати аккаунт</h4>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	            </div>
+	            <div class="modal-body">
+	                <form th:object="${account}" id="account_form" class="form" th:action="@{/account/edit}" method="post">
+	                    <input type="hidden" th:field="*{id}">
+	                    <input type="hidden" th:field="*{type}">
+	                    <div class="form-group">
+	                        <label>Номер договору</label>
+	                        <input type="text" th:field="*{account_id}" class="form-control">
+	                    </div>
+	                    <div class="form-group">
+	                        <label>Ім'я користувача</label>
+	                        <input type="text" th:field="*{username}" class="form-control">
+	                    </div>
+	                    <div class="form-group">
+	                        <label>Посилання</label>
+	                        <input type="text" th:field="*{link}" class="form-control">
+	                    </div>
+	                </form>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-default modal_close" data-dismiss="modal">Скасувати</button>
+	                <button type="submit" class="btn btn-primary" onclick="$('#account_form').submit();">Зберегти</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>

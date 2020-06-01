@@ -1,0 +1,12 @@
+<!DOCTYPE HTML>
+<html th:replace="layout/main::layout(~{::title}, ~{::section})" xmlns:th="http://www.thymeleaf.org">
+	<head>
+    	<title th:fragment="title">Welcome</title>
+	</head>
+   	<body>
+   		<section>
+      		<h2>Error</h2>
+      		<p th:text="${message}">..!..</p>
+    	</section>   
+   	</body>
+</html>

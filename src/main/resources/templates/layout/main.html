@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html th:fragment="layout(title, content, alert_type, alert_message)" xmlns:th="http://www.thymeleaf.org">
+	<head th:replace="layout/head::head(${title})"></head>
+	<body>
+    	<header th:replace="layout/header::header"></header>
+    	<div class="container">
+    		<div id="action_alert_box" th:if="${alert_message}" class="alert" th:classappend="@{alert-{type}(type=${alert_type})}" role="alert">
+				<div th:text="${alert_message}"></div>
+				<script>
+					setTimeout(
+						function(){
+							$('#action_alert_box').slideUp();
+						},
+						3000
+					);
+				</script>
+			</div>
+			<div th:replace="${content}">
+	        	<p>Layout content</p>
+	    	</div>
+    	</div>
+		<footer th:replace="layout/footer::footer"></head>
+	</body>
+</html>

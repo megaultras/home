@@ -1,0 +1,24 @@
+<div th:fragment="stat(max, min, avg)">
+	<table th:if="${max.size() > 0}" class="table table-striped table-borderless table-hover">
+	    <tr th:each="row, iterStat: ${max}">
+	        <td style="width:15%;" th:text="${iterStat.count}"></td>
+	        <td th:text="${row.period}"></td>
+	        <td style="width:25%;" th:text="${row.volume}"></td>
+	    </tr>
+	</table>
+	<hr>
+	<table th:if="${avg != null}" class="table table-striped table-borderless table-hover">
+	    <tr>
+	        <td>в середньому</td>
+	        <td style="width:25%;" th:text="${avg}"></td>
+	    </tr>
+	</table>
+	<hr>
+	<table th:if="${min.size() > 0}" class="table table-striped table-borderless table-hover">
+	    <tr th:each="row, iterStat: ${min}">
+	        <td style="width:15%;" th:text="${iterStat.count}"></td>
+	        <td th:text="${row.period}"></td>
+	        <td style="width:25%;" th:text="${row.volume}"></td>
+	    </tr>
+	</table>
+</div>

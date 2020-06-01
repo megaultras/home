@@ -1,0 +1,22 @@
+<div th:fragment="add(record, last)">
+    <form id="add_record_form" th:object="${record}" class="form-inline">
+	    <input type="hidden" th:field="*{counterType}">
+	    <div class="form-group">
+	        <input type="text" th:field="*{period}" readonly style="width:100px;">
+	    </div>
+	    <div class="form-group">
+	        <input type="text" th:field="*{counterValue}" class="form-control" th:placeholder="${last.counterValue}" style="width:90px;">
+	    </div>
+	    <div class="form-group">
+	        <button type="button" class="btn btn-primary" onclick="addRecord();">додати</button>
+	    </div>
+	    <div class="form-group">
+	        <button type="button" class="btn btn-light" onclick="$('#add_record_form').find('#counterValue').val('');">X</button>
+	    </div>
+	</form>
+	<div id="add_form_errors" class="error"></div>
+</div>
+
+<div th:fragment="edit">
+    form
+</div>

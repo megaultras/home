@@ -1,0 +1,54 @@
+<div th:fragment="list(pagination)">
+	<div th:if="${pagination.records.size() > 0}">
+	    <table class="table table-striped table-borderless table-hover">
+	        <tr>
+	            <th>Дата</th>
+	            <th>Кількість за місяць</th>
+	            <th>Показник</th>
+	        </tr>
+	        <tr th:each="row, iterStat: ${pagination.records}">
+	            <td th:text="${row.period}" style="width:25%"></td>
+	            <td th:text="${row.volume}" style="width:35%"></td>
+	            <td style="width:40%">
+	            	<div id="last_value">
+		            	<span th:text="${row.counterValue}"></span>
+		            	<button th:if="${row.id == last.id}" type="button" class="btn btn-warning" style="float:right;" onclick="$('#last_value').hide(); $('#last_value_edit').show();">змінити</button>
+	            	</div>
+	            	<div id="last_value_edit" th:if="${row.id == last.id}" style="display:none;">
+	            		<form id="edit_record_form" th:object="${last}" class="form-inline">
+						    <input type="hidden" th:field="*{id}">
+						    <input type="hidden" th:field="*{counterType}">
+					        <input type="text" th:field="*{counterValue}" style="width:100px;">
+					        <button type="button" class="btn btn-primary" onclick="editRecord();">зберегти</button>
+					        <button type="button" class="btn btn-light" onclick="$('#last_value_edit').hide(); $('#last_value').show();">X</button>
+					    </form>
+					    <div id="edit_form_errors" class="error"></div>
+	            	</div>
+	            </td>
+	        </tr>
+	    </table>
+	    
+	    <nav th:if="${pagination.pages > 1}">
+	        <ul class="pagination">
+	            <li class="page-item" th:classappend="(${pagination.currentPage} == 1) ? 'disabled'">
+	                <a th:href="@{/{type}?page=1(type=${type})}" class="page-link" th:disabled="${pagination.currentPage} == 1">&laquo;</a>
+	            </li>
+	            <li class="page-item" th:classappend="(${pagination.currentPage} == 1) ? 'disabled'">
+	                <a th:href="@{/{type}?page={page}(type=${type}, page=${pagination.prevPage})}" class="page-link" th:disabled="${pagination.currentPage} == 1">&lsaquo;</a>
+	            </li>
+	            <li class="page-item" th:each="row: ${#numbers.sequence(1, pagination.pages, 1)}" th:classappend="(${row} == ${pagination.currentPage}) ? 'active'">
+	                <a th:href="@{/{type}?page={page}(type=${type}, page=${row})}" class="page-link" th:text="${row}"></a>
+	            </li>
+	            <li class="page-item"  th:classappend="(${pagination.currentPage} == ${pagination.pages}) ? 'disabled'">
+	                <a th:href="@{/{type}?page={page}(type=${type}, page=${pagination.nextPage})}" class="page-link" th:disabled="${pagination.currentPage} == ${pagination.pages}">&rsaquo;</a>
+	            </li>
+	            <li class="page-item" th:classappend="(${pagination.currentPage} == ${pagination.pages}) ? 'disabled'">
+	                <a th:href="@{/{type}?page={page}(type=${type}, page=${pagination.pages})}" class="page-link" th:disabled="${pagination.currentPage} == ${pagination.pages}">&raquo;</a>
+	            </li>
+	        </ul>
+	    </nav>
+	</div>
+	<div th:if="${pagination.records.size() == 0}">
+		Записів не знайдено
+	</div>
+</div>

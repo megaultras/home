@@ -24,6 +24,9 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-jdbc')
 	implementation 'org.json:json:20180813'
 	compile group: 'com.wizarius', name: 'wizarius-orm', version: '0.0.12'
+	
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-test'
 }
 
 test {

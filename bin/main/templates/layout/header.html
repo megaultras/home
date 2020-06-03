@@ -18,6 +18,14 @@
 	                    <a href="" class="nav-link" th:href="@{/water}">Вода</a>
 	                </li>
 	            </ul>
+	            <ul class="nav navbar-nav navbar-right">
+	            	<li th:if="${admin}" class="nav-item">
+	                    <a href="" class="nav-link" th:href="@{/logout}" th:text="${admin}">Вийти</a>
+	                </li>
+	                <li th:if="!${admin}" class="nav-item">
+	                    <a href="" class="nav-link" th:href="@{/login}">Увійти</a>
+	                </li>
+	            </ul>
 	        </div>
 	    </div>
 	</nav>

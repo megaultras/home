@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Calendar;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.security.Principal;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,8 +44,8 @@ public class RecordsController extends AbstractController
 		value = "", 
 		method = RequestMethod.GET
 	)
-    public String index(Model model, @RequestParam(required = false) Integer page)
-    {
+    public String index(Model model, @RequestParam(required = false) Integer page, Principal principal)
+    {	
 //  Titles
     	model.addAttribute("h1", this.h1);
     	model.addAttribute("type", this.type);

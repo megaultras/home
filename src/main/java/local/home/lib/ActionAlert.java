@@ -1,21 +1,20 @@
 package local.home.lib;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ActionAlert 
 {
-	private String type;
+	private String type = "";
+	private String message = "";
+	private boolean enabled = false;
 	
-	private String message;
+	private static ArrayList<String> types = new ArrayList<String>() {{
+		add("success");
+		add("danger");
+	}};
 	
-	private static ArrayList<String> types = new ArrayList<String>();
-	
-	{
-		ActionAlert.types.add("success");
-		ActionAlert.types.add("danger");
-	}
-	
-	public ActionAlert(String type, String message) 
+	public void setAlert(String type, String message) 
 	{
 		try {
 			this.setType(type);
@@ -24,29 +23,48 @@ public class ActionAlert
 	    }
 		
 		this.setMessage(message);
+		this.enabled = true;
 	}
-
+	
+	public String useAlert() throws Exception
+	{	
+		String message = this.getMessage();
+		
+		this.type = "";
+		this.message = "";
+		this.enabled = false;
+		
+		return message;
+	}
+	
 	public String getType() 
 	{
-		return type;
+		String output = this.type;
+		
+		return output;
 	}
 
 	private void setType(String type) throws Exception
 	{
 		if (!ActionAlert.types.contains(type)) {
-			throw new Exception("Unallowed alert type");
+			throw new Exception("Unallowed alert type: '" + type + "'");
 		}
 		
 		this.type = type;
 	}
 
-	public String getMessage() 
+	private String getMessage() 
 	{
-		return message;
+		return this.message;
 	}
-
+	
 	private void setMessage(String message) 
 	{
 		this.message = message;
+	}
+	
+	public boolean isEnabled() 
+	{
+		return this.enabled;
 	}
 }

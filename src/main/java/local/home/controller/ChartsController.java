@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import local.home.lib.ServiceManager;
 import local.home.model.CounterEntity;
  
 @Controller
@@ -34,8 +33,8 @@ public class ChartsController extends AbstractController
     	response.put("result", false);
     	
 //  Reset period range
-    	ServiceManager.getData().setPeriodFrom(period_from);
-    	ServiceManager.getData().setPeriodTo(period_to);
+    	this.context.getData().setPeriodFrom(period_from);
+    	this.context.getData().setPeriodTo(period_to);
     	
 //  Convert period to timestamp
     	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -63,7 +62,7 @@ public class ChartsController extends AbstractController
 //  Get records
     	ArrayList<CounterEntity> records = new ArrayList<CounterEntity>();
     	
-    	for (CounterEntity record: ServiceManager.getData().getRecords(type)) {
+    	for (CounterEntity record: this.context.getData().getRecords(type)) {
     		Timestamp recordTimestamp;
     		try {
         		Date recordDate = dateFormat.parse(record.getPeriod() + " 11:00:00");
@@ -100,7 +99,7 @@ public class ChartsController extends AbstractController
     	
 //  Build list
     	HashMap<String, ArrayList<CounterEntity>> records = new HashMap<String, ArrayList<CounterEntity>>();
-    	records.put("current", new ArrayList<CounterEntity>(ServiceManager.getData().getRecords(type).subList(0, 12)));
+    	records.put("current", new ArrayList<CounterEntity>(this.context.getData().getRecords(type).subList(0, 12)));
     	Collections.reverse(records.get("current"));
     	
     	records.put("last", new ArrayList<CounterEntity>());
@@ -116,10 +115,10 @@ public class ChartsController extends AbstractController
         		String monthString = (month < 10 ? "0" + Integer.toString(month) : Integer.toString(month));
         		
         		String lastYearRecordKey = Integer.toString(lastYear) + "-" + monthString;
-        		if (!ServiceManager.getData().getRecordsByDate(type).containsKey(lastYearRecordKey)) {
+        		if (!this.context.getData().getRecordsByDate(type).containsKey(lastYearRecordKey)) {
         			continue;
         		}
-        		CounterEntity lastYearRecord = ServiceManager.getData().getRecordsByDate(type).get(lastYearRecordKey);
+        		CounterEntity lastYearRecord = this.context.getData().getRecordsByDate(type).get(lastYearRecordKey);
         		records.get("last").add(lastYearRecord);
         	} catch(Exception ex) {
         	    System.out.println("Timestamp parse error: " + ex.getMessage());

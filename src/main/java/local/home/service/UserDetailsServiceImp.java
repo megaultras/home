@@ -11,18 +11,20 @@ import com.wizarius.orm.database.DBException;
 
 import local.home.model.UsersEntity;
 import local.home.model.UsersStorage;
-import local.home.lib.ServiceManager;
+import local.home.lib.AppContext;
 
 public class UserDetailsServiceImp implements UserDetailsService 
 {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException 
 	{
+		AppContext context = AppContext.getInstance();
+		
 		UsersStorage storage;
 		UsersEntity userEntity = null;
 		
 		try {
-			storage = new UsersStorage(ServiceManager.getConnectionPool());
+			storage = new UsersStorage(context.getConnectionPool());
 			
 			userEntity = storage.getSession().getSelectQuery()
 				.where("login", username)

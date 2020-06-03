@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.wizarius.orm.database.DBException;
 
-import local.home.lib.ActionAlert;
-import local.home.lib.ServiceManager;
 import local.home.model.AccountsEntity;
 import local.home.model.AccountsStorage;
  
@@ -32,11 +30,12 @@ public class AccountController extends AbstractController
     	AccountsStorage storage = null;
     	
     	try {
-    		storage = new AccountsStorage(ServiceManager.getConnectionPool());
+    		storage = new AccountsStorage(this.context.getConnectionPool());
     	} catch (DBException ex) {
 	    	System.out.println("Error: " + ex.getMessage());
 	    	
-	    	ServiceManager.getData().setActionAlert("danger", "Невдалося створити сторедж");
+//	    	ActionAlert.setAlert("danger", "Невдалося створити сторедж");
+	    	
 	    	return "redirect:/" + account.getType();
 	    }
     	
@@ -45,16 +44,16 @@ public class AccountController extends AbstractController
     			storage.getSession().getUpdateQuery().where("id", account.getId()).execute(account);
     		} catch (DBException ex) {
     	    	System.out.println("Update error: " + ex.getMessage());
+    	    	this.context.getAlert().setAlert("danger", "Невдалося зберегти дані");
     	    	
-    	    	ServiceManager.getData().setActionAlert("danger", "Невдалося зберегти дані");
     	    	return "redirect:/" + account.getType();
     	    }
     		
-    		ServiceManager.getData().loadAccounts();
+    		this.context.getData().loadAccounts();
     		
 //  Set action alert
-    		ServiceManager.getData().setActionAlert("success", "Аккаунт відредаговано");
-        	
+    		this.context.getAlert().setAlert("success", "Аккаунт відредаговано");
+    		
         	System.out.println("OK");
     	}
     	

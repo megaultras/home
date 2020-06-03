@@ -1,11 +1,14 @@
 <!DOCTYPE HTML>
-<html th:fragment="layout(title, content, alert_type, alert_message)" xmlns:th="http://www.thymeleaf.org">
+<html th:fragment="layout(title, content)" xmlns:th="http://www.thymeleaf.org">
 	<head th:replace="layout/head::head(${title})"></head>
 	<body>
     	<header th:replace="layout/header::header"></header>
+    	
+    	<div th:text="${alert_message}"></div>
+    	
     	<div class="container">
-    		<div id="action_alert_box" th:if="${alert_message}" class="alert" th:classappend="@{alert-{type}(type=${alert_type})}" role="alert">
-				<div th:text="${alert_message}"></div>
+    		<div id="action_alert_box" th:if="${alert}" class="alert" th:classappend="@{alert-{type}(type=${alert.getType()})}" role="alert">
+    			<div th:text="${alert.useAlert()}"></div>
 				<script>
 					setTimeout(
 						function(){

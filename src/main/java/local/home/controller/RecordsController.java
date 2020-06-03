@@ -17,7 +17,6 @@ import org.json.JSONObject;
 
 import com.wizarius.orm.database.DBException;
 
-import local.home.lib.ServiceManager;
 import local.home.lib.Pagination;
 import local.home.model.CounterEntity;
 import local.home.model.CounterStorage;
@@ -54,25 +53,25 @@ public class RecordsController extends AbstractController
     	if (page == null) {
     		page = 1;
     	}
-    	Pagination pagination = ServiceManager.getData().getRecordsByPages(this.type, (int) page, this.pageSize);
+    	Pagination pagination = this.context.getData().getRecordsByPages(this.type, (int) page, this.pageSize);
         model.addAttribute("pagination", pagination);
         
 //  Account
-        model.addAttribute("account", ServiceManager.getData().getAccount(this.type));
+        model.addAttribute("account", this.context.getData().getAccount(this.type));
         
 //  Statistic
-        model.addAttribute("max", ServiceManager.getData().getMax(this.type));
-        model.addAttribute("min", ServiceManager.getData().getMin(this.type));
-        model.addAttribute("avg", ServiceManager.getData().getAvg(this.type));
+        model.addAttribute("max", this.context.getData().getMax(this.type));
+        model.addAttribute("min", this.context.getData().getMin(this.type));
+        model.addAttribute("avg", this.context.getData().getAvg(this.type));
         
 //  Last record
-        model.addAttribute("last", ServiceManager.getData().getRecords(this.type).get(0));
+        model.addAttribute("last", this.context.getData().getRecords(this.type).get(0));
         
 //  Model for add form
         CounterEntity record = new CounterEntity();
         record.setCounterType(this.type);
         
-        String last_period = ServiceManager.getData().getRecords(this.type).get(0).getPeriod();
+        String last_period = this.context.getData().getRecords(this.type).get(0).getPeriod();
         Integer lastYear = Integer.parseInt(last_period.substring(0, 4));
         Integer lastMonth = Integer.parseInt(last_period.substring(5, 7));
         lastMonth++;
@@ -87,13 +86,6 @@ public class RecordsController extends AbstractController
         record.setPeriod(nextPeriod);
         
         model.addAttribute("record", record);
-        
-//  Alerts
-        if (ServiceManager.getData().getActionAlert() != null) {
-        	model.addAttribute("alert_type", ServiceManager.getData().getActionAlert().getType());
-        	model.addAttribute("alert_message", ServiceManager.getData().getActionAlert().getMessage());
-        	ServiceManager.getData().unsetActionAlert();
-        }
         
         return "records/index";
     }
@@ -119,7 +111,7 @@ public class RecordsController extends AbstractController
     	CounterStorage storage = null;
     	
     	try {
-    		storage = new CounterStorage(ServiceManager.getConnectionPool());
+    		storage = new CounterStorage(this.context.getConnectionPool());
     	} catch (DBException ex) {
 	    	System.out.println("Error: " + ex.getMessage());
 	    	
@@ -143,7 +135,7 @@ public class RecordsController extends AbstractController
 //  Set record props
     	record.setPeriod(record.getPeriod() + "-01");
     	
-    	CounterEntity lastRecord = ServiceManager.getData().getRecords(type).get(0);
+    	CounterEntity lastRecord = this.context.getData().getRecords(type).get(0);
     	record.setVolume(record.getCounterValue() - lastRecord.getCounterValue());
     	
     	Date currentDate = Calendar.getInstance().getTime();
@@ -165,17 +157,17 @@ public class RecordsController extends AbstractController
 	    }
     	
 //  Reload data by type
-    	ServiceManager.getData().loadRecords(this.type);
-    	ServiceManager.getData().loadMin(this.type);
-    	ServiceManager.getData().loadMax(this.type);
+		this.context.getData().loadRecords(this.type);
+		this.context.getData().loadMin(this.type);
+		this.context.getData().loadMax(this.type);
     	try {
-	    	ServiceManager.getData().loadAvg(this.type);
+    		this.context.getData().loadAvg(this.type);
 	    } catch (DBException ex) {
 	    	System.out.println("Error: " + ex.getMessage());
 	    }
     	
 //  Set action alert
-    	ServiceManager.getData().setActionAlert("success", "Запис додано");
+    	this.context.getAlert().setAlert("success", "Запис додано");
     	
     	System.out.println("OK");
     	
@@ -203,7 +195,7 @@ public class RecordsController extends AbstractController
     	CounterStorage storage = null;
     	
     	try {
-    		storage = new CounterStorage(ServiceManager.getConnectionPool());
+    		storage = new CounterStorage(this.context.getConnectionPool());
     	} catch (DBException ex) {
 	    	System.out.println("Error: " + ex.getMessage());
 	    	
@@ -225,10 +217,10 @@ public class RecordsController extends AbstractController
     	}
     	
 //  Set record props
-    	CounterEntity prevRecord = ServiceManager.getData().getRecords(type).get(1);
+    	CounterEntity prevRecord = this.context.getData().getRecords(type).get(1);
     	record.setVolume(record.getCounterValue() - prevRecord.getCounterValue());
     	
-    	CounterEntity oldRecord = ServiceManager.getData().getRecord(type, record.getId());
+    	CounterEntity oldRecord = this.context.getData().getRecord(type, record.getId());
     	record.setCreateTime(oldRecord.getCreateTime());
     	record.setPeriod(oldRecord.getPeriod());
     	
@@ -247,17 +239,17 @@ public class RecordsController extends AbstractController
 	    }
     	
 //  Reload data by type
-    	ServiceManager.getData().loadRecords(this.type);
-    	ServiceManager.getData().loadMin(this.type);
-    	ServiceManager.getData().loadMax(this.type);
+		this.context.getData().loadRecords(this.type);
+		this.context.getData().loadMin(this.type);
+		this.context.getData().loadMax(this.type);
     	try {
-	    	ServiceManager.getData().loadAvg(this.type);
+    		this.context.getData().loadAvg(this.type);
 	    } catch (DBException ex) {
 	    	System.out.println("Error: " + ex.getMessage());
 	    }
     	
 //  Set action alert
-    	ServiceManager.getData().setActionAlert("success", "Запис відредаговано");
+    	this.context.getAlert().setAlert("success", "Запис відредаговано");
     	
     	System.out.println("OK");
     	

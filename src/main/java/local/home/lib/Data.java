@@ -13,11 +13,13 @@ import com.wizarius.orm.database.data.DBOrderType;
 import com.wizarius.orm.database.connection.DBConnection;
 
 import local.home.model.*;
-import local.home.lib.ServiceManager;
+import local.home.lib.AppContext;
 import local.home.lib.Pagination;
 
 public class Data 
-{
+{	
+	AppContext context;
+	
 //	Storages
 	CounterStorage counterStorage;
 	AccountsStorage accountsStorage;
@@ -52,9 +54,11 @@ public class Data
 	
 	public Data()
 	{
+		this.context = AppContext.getInstance();
+		
 		try {
-			this.counterStorage = new CounterStorage(ServiceManager.getConnectionPool());
-			this.accountsStorage = new AccountsStorage(ServiceManager.getConnectionPool());
+			this.counterStorage = new CounterStorage(this.context.getConnectionPool());
+			this.accountsStorage = new AccountsStorage(this.context.getConnectionPool());
 		} catch (DBException ex) {
 	    	System.out.println("Error: " + ex.getMessage());
 	    	System.exit(0);
@@ -242,23 +246,7 @@ public class Data
 	{
 		return Data.months;
 	}
-
-//	Alerts ====================================================================
-	public ActionAlert getActionAlert() 
-	{
-		return actionAlert;
-	}
-
-	public void setActionAlert(String type, String message) 
-	{
-		this.actionAlert = new ActionAlert(type, message);
-	}
 	
-	public void unsetActionAlert()
-	{
-		this.actionAlert = null;
-	}
-
 //	Chart date range
 	public String getPeriodFrom() 
 	{

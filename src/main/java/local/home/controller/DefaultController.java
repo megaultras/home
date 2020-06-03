@@ -4,11 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import local.home.lib.ServiceManager;
  
 @Controller
-public class DefaultController 
+public class DefaultController extends AbstractController
 {
     @RequestMapping(
 		value = "/", 
@@ -16,20 +14,20 @@ public class DefaultController
 	)
     public String index(Model model) 
     {
-    	if (ServiceManager.getData().getPeriodFrom() == null) {
-    		int endIndex = ServiceManager.getData().getMonths().size() - 1;
+    	if (this.context.getData().getPeriodFrom() == null) {
+    		int endIndex = this.context.getData().getMonths().size() - 1;
     		int startIndex = endIndex - 11;
     		if (startIndex < 0) {
     			startIndex = 0;
     		}
     		
-    		ServiceManager.getData().setPeriodFrom(ServiceManager.getData().getMonths().get(startIndex));
-    		ServiceManager.getData().setPeriodTo(ServiceManager.getData().getMonths().get(endIndex));
+    		this.context.getData().setPeriodFrom(this.context.getData().getMonths().get(startIndex));
+    		this.context.getData().setPeriodTo(this.context.getData().getMonths().get(endIndex));
     	}
     	
-        model.addAttribute("periods", ServiceManager.getData().getMonths());
-        model.addAttribute("periodFrom", ServiceManager.getData().getPeriodFrom());
-        model.addAttribute("periodTo", ServiceManager.getData().getPeriodTo());
+        model.addAttribute("periods", this.context.getData().getMonths());
+        model.addAttribute("periodFrom", this.context.getData().getPeriodFrom());
+        model.addAttribute("periodTo", this.context.getData().getPeriodTo());
     	
         return "default/index";
     }

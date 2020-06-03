@@ -1,13 +1,13 @@
 package local.home.interceptor;
 
-import java.security.Principal;
-
 import javax.servlet.http.*;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+
+import local.home.lib.AppContext;
 
 public class MainInterceptor extends HandlerInterceptorAdapter
 {
@@ -38,6 +38,13 @@ public class MainInterceptor extends HandlerInterceptorAdapter
 			}
 		} catch (Exception ex) {
 			
+		}
+		
+//  Alerts
+		AppContext context = AppContext.getInstance();
+		if (context.getAlert().isEnabled()) {
+			System.out.println("++++++++++++++++++");
+			request.setAttribute("alert", context.getAlert());
 		}
 	}
 }

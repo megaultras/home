@@ -2,22 +2,31 @@ package local.home.lib;
 
 import local.home.lib.Data;
 import local.home.lib.ActionAlert;
+import local.home.config.DbConfig;
 
 import com.wizarius.orm.database.DBException;
 import com.wizarius.orm.database.connection.DBConnectionPool;
 import com.wizarius.orm.database.mysql.driver.MysqlDriver;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class AppContext 
 {
-	private static final AppContext instance = new AppContext();
+	private static AppContext instance;
 	
 	private Data data;
 	private ActionAlert alert;
 	
+	private DbConfig dbConfig;
+	
 	private DBConnectionPool connectionPool;
 	
-	private AppContext()
+	private AppContext(DbConfig config)
 	{
+//	Initialize configuration
+		this.dbConfig = config;
+		
 //	Initiate DB connections pool
 		System.out.println("Init DB connections pool...");
 		this.setConnectionPool();
@@ -27,6 +36,11 @@ public class AppContext
 		System.out.println("Set alert...");
 		this.setAlert();
 		System.out.println(" - OK");
+	}
+	
+	public static void init(DbConfig config)
+	{
+		AppContext.instance = new AppContext(config);
 	}
 	
 	public static AppContext getInstance()
@@ -42,20 +56,31 @@ public class AppContext
 	
 	private void setConnectionPool()
 	{
+		System.out.println(this.dbConfig.getUsername());
+//		System.out.println(this.env.toString());
+		
+		
+		
 		try {
 			this.connectionPool = new DBConnectionPool(new MysqlDriver(
-    			"com.mysql.cj.jdbc.Driver",
-	            "web",
-	            "root",
-	            "home",
-	            "localhost",
-	            3306,
+				this.dbConfig.getDrivers(),
+    			this.dbConfig.getUsername(),
+    			this.dbConfig.getPassword(),
+    			this.dbConfig.getDatabase(),
+	            this.dbConfig.getHost(),
+	            this.dbConfig.getPort(),
 	            null)
 	    	);
 	    } catch (DBException ex) {
 	    	System.out.println("Error: " + ex.getMessage());
 	    	System.exit(0);
 	    }
+	}
+	
+//	DB Config ===============================
+	public DbConfig getDbConfig()
+	{
+		return this.dbConfig;
 	}
 	
 //	Data ====================================

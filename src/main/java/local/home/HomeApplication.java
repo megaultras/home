@@ -1,20 +1,25 @@
 package local.home;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.event.EventListener;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 
-//import com.wizarius.orm.database.mysql.driver.MysqlDriver;
-//import com.wizarius.orm.database.connection.DBConnectionPool;
+import javax.annotation.PostConstruct;
+
 import com.wizarius.orm.database.DBException;
 
 import local.home.lib.Data;
+import local.home.config.DbConfig;
 import local.home.lib.AppContext;
 
 @SpringBootApplication
 public class HomeApplication 
 {
+	@Autowired
+	private DbConfig dbConfig;
+	
 	public static void main(String[] args) 
 	{
 		SpringApplication.run(HomeApplication.class, args);
@@ -28,7 +33,8 @@ public class HomeApplication
 	/**
 	 * After Spring Boot initialization action
 	 */
-	@EventListener(ApplicationReadyEvent.class)
+//	@EventListener(ApplicationReadyEvent.class)
+	@PostConstruct
 	public void init() 
 	{
 		System.out.println("===========================================");
@@ -36,12 +42,13 @@ public class HomeApplication
 	    System.out.println("-------------------------------------------");
 	    
 //	Init context
+	    AppContext.init(this.dbConfig);
 	    AppContext context = AppContext.getInstance();
 	    
 //	Init data
 	    System.out.println("Init data...");
 	    context.setData();
-	    System.out.println("OK");
+	    System.out.println(" - OK");
 	    
 //	Load records
 	    System.out.println("Load records...");

@@ -5,17 +5,32 @@
 	</head>
     <body>
     	<section>
-	        <div th:if="${param.error}">
-	            Invalid username and password.
-	        </div>
-	        <div th:if="${param.logout}">
-	            You have been logged out.
-	        </div>
-	        <form th:action="@{/login}" method="post">
-	            <div><label> User Name : <input type="text" name="username"/> </label></div>
-	            <div><label> Password: <input type="password" name="password"/> </label></div>
-	            <div><input type="submit" value="Sign In"/></div>
-	        </form>
+    		<div class="row">
+			    <div class="col-4"></div>
+    			<div class="col-4">
+		    		<div class="container" style="margin:100px auto 200px auto;">
+				    	<form class="form-signin" method="post" action="/login">
+				        	<h2 class="form-signin-heading" style="text-align:center;">Авторизація</h2>
+							<div th:if="${param.error}" class="alert alert-danger" role="alert">
+								Невірні дані
+							</div>
+							<div th:if="${param.logout}" class="alert alert-success" role="alert">
+					            You have been logged out.
+					        </div>
+							<p>
+					          	<label for="username" class="sr-only">Логін</label>
+					          	<input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
+					        </p>
+					        <p>
+					          	<label for="password" class="sr-only">Пароль</label>
+					          	<input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+					        </p>
+							<button class="btn btn-lg btn-primary btn-block" type="submit">Авторизуватися</button>
+				      	</form>
+					</div>
+				</div>
+				<div class="col-4"></div>
+			</div>
         </section>
     </body>
 </html>

@@ -16,7 +16,8 @@ import local.home.service.UserDetailsServiceImp;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter 
 {
 	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception 
+	{
 		auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
 	}
 	
@@ -49,12 +50,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 	}
 
 	@Bean
-	public UserDetailsService userDetailsService() {
+	public UserDetailsService userDetailsService() 
+	{
 		return new UserDetailsServiceImp();
 	};
 	  
 	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
+	public BCryptPasswordEncoder passwordEncoder() 
+	{
 		return new BCryptPasswordEncoder();
 	};
 }

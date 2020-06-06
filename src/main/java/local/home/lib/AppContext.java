@@ -2,7 +2,9 @@ package local.home.lib;
 
 import local.home.lib.Data;
 import local.home.lib.ActionAlert;
+import local.home.lib.AuthSession;
 import local.home.config.DbConfig;
+import local.home.config.AppConfig;
 
 import com.wizarius.orm.database.DBException;
 import com.wizarius.orm.database.connection.DBConnectionPool;
@@ -19,18 +21,25 @@ public class AppContext
 	private ActionAlert alert;
 	
 	private DbConfig dbConfig;
+	private AppConfig appConfig;
 	
 	private DBConnectionPool connectionPool;
 	
-	private AppContext(DbConfig config)
+	private AuthSession authSession;
+	
+	private AppContext(DbConfig dbConfig, AppConfig appConfig)
 	{
 //	Initialize configuration
-		this.dbConfig = config;
+		this.dbConfig = dbConfig;
+		this.appConfig = appConfig;
 		
 //	Initiate DB connections pool
 		System.out.println("Init DB connections pool...");
 		this.setConnectionPool();
 		System.out.println(" - OK");
+		
+//	Init authenticate session
+		this.authSession = new AuthSession();
 		
 //	Init alert
 		System.out.println("Set alert...");
@@ -38,9 +47,9 @@ public class AppContext
 		System.out.println(" - OK");
 	}
 	
-	public static void init(DbConfig config)
+	public static void init(DbConfig dbConfig, AppConfig appConfig)
 	{
-		AppContext.instance = new AppContext(config);
+		AppContext.instance = new AppContext(dbConfig, appConfig);
 	}
 	
 	public static AppContext getInstance()
@@ -56,11 +65,6 @@ public class AppContext
 	
 	private void setConnectionPool()
 	{
-		System.out.println(this.dbConfig.getUsername());
-//		System.out.println(this.env.toString());
-		
-		
-		
 		try {
 			this.connectionPool = new DBConnectionPool(new MysqlDriver(
 				this.dbConfig.getDrivers(),
@@ -83,6 +87,11 @@ public class AppContext
 		return this.dbConfig;
 	}
 	
+	public AppConfig getAppConfig()
+	{
+		return this.appConfig;
+	}
+	
 //	Data ====================================
 	public Data getData()
 	{
@@ -103,5 +112,11 @@ public class AppContext
 	private void setAlert()
 	{
 		this.alert = new ActionAlert();
+	}
+	
+//	Auth session ============================
+	public AuthSession getAuthSession()
+	{
+		return this.authSession;
 	}
 }

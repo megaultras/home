@@ -25,6 +25,7 @@ public class MvcConfig implements WebMvcConfigurer
 		excludedPaths.add("/css/bootstrap/*");
 		excludedPaths.add("/js/*");
 		excludedPaths.add("/images/*");
+		excludedPaths.add("/favicon.ico");
 		
 	    registry.addInterceptor(new MainInterceptor()).excludePathPatterns(excludedPaths);
 	}

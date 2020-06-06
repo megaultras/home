@@ -33,8 +33,7 @@ public class AccountController extends AbstractController
     		storage = new AccountsStorage(this.context.getConnectionPool());
     	} catch (DBException ex) {
 	    	System.out.println("Error: " + ex.getMessage());
-	    	
-//	    	ActionAlert.setAlert("danger", "Невдалося створити сторедж");
+	    	this.context.getAlert().setAlert("danger", "Невдалося створити сторедж");
 	    	
 	    	return "redirect:/" + account.getType();
 	    }
